@@ -46,20 +46,23 @@ class CTCTextEncoder:
                 f"Can't encode text '{text}'. Unknown chars: '{' '.join(unknown_chars)}'"
             )
 
-    def decode(self, inds) -> str:
-        """
-        Raw decoding without CTC.
-        Used to validate the CTC decoding implementation.
-
-        Args:
-            inds (list): list of tokens.
-        Returns:
-            raw_text (str): raw text with empty tokens and repetitions.
-        """
-        return "".join([self.ind2char[int(ind)] for ind in inds]).strip()
+    def decode(self, log_probs, log_probs_lengths):
+        inds = log_probs.argmax(dim=-1)
+        decoded = []
+        for ind, length in zip(inds, log_probs_lengths):
+            ind = ind[:length]
+            decoded.append(self.ctc_decode(ind))
+        return decoded
 
     def ctc_decode(self, inds) -> str:
-        pass  # TODO
+        prev_token = None
+        decoded = []
+        for ind in inds:
+            char = self.ind2char.get(ind, self.EMPTY_TOK)
+            if char != self.EMPTY_TOK and char != prev_token:
+                decoded.append(char)
+            prev_token = char
+        return "".join(decoded).strip()
 
     @staticmethod
     def normalize_text(text: str):
