@@ -1,6 +1,6 @@
-torch==2.2.0
-torchvision==0.17.0
-torchaudio==2.2.0
+torch==2.4.0
+torchvision==0.19.0
+torchaudio==2.4.0
 soundfile
 torchmetrics
 numpy==1.26.4
@@ -14,7 +14,7 @@ hydra-core
 editdistance
 datasets
 soundfile
-
+wget
 black
 isort
 pre-commit

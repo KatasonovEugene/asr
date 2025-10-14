@@ -208,7 +208,7 @@ class Conformer(nn.Module):
     def forward(self, spectrogram, spectrogram_length, **batch):
         log_probs_length = self.transform_lengths(spectrogram_length)
         conf_emb = self.preprocess(spectrogram)
-        padding_mask = self._create_padding_mask(log_probs_length)
+        padding_mask = self._create_padding_mask(log_probs_length).to(spectrogram.device)
         for conformer_block in self.conformer_blocks:
             conf_emb = conformer_block(conf_emb, padding_mask)
         logits = self.fc(conf_emb)

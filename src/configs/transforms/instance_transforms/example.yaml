@@ -11,13 +11,18 @@ train:
       - _target_: torchaudio.transforms.AmplitudeToDB
         stype: 'power'
         top_db: 80
-        
+      # - _target_: src.transforms.RandomTimeStretch
+      #   min_rate: 0.9
+      #   max_rate: 1.1
+      #   p: 0.5
+      #   hop_length: 160
+      #   n_freq: 80
   audio: # name of the tensor on which we apply transform
     _target_: torch.nn.Sequential
     _args_:
       - _target_: src.transforms.AddWhiteNoise
-        min_snr_db: 10
-        max_snr_db: 30
+        min_snr_in_db: 10
+        max_snr_in_db: 30
         p: 0.5
       # - _target_: src.transforms.RandomPitchShift
       #   min_transpose_semitones: -2

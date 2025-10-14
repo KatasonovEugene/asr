@@ -1,9 +1,10 @@
 import torch
+from torch import nn
 import torchaudio
 import torch.nn.functional as F
 
 
-class SpecAugment(torch.nn.Module):
+class SpecAugment(nn.Module):
     def __init__(self, freq_masks, time_masks, freq_width, time_width):
         super().__init__()
         self.transforms = torch.nn.Sequential(
@@ -15,18 +16,18 @@ class SpecAugment(torch.nn.Module):
         return self.transforms(spec)
     
 
-class RandomTimeStretch(torch.nn.Module):
-    def __init__(self, min_rate=0.9, max_rate=1.1, p=0.5):
+class RandomTimeStretch(nn.Module):
+    def __init__(self, min_rate, max_rate, p, hop_length, n_freq):
         super().__init__()
         self.min_rate = min_rate
         self.max_rate = max_rate
         self.p = p
-        self.stretch = torchaudio.transforms.TimeStretch()
+        self.stretch = torchaudio.transforms.TimeStretch(hop_length, n_freq)
 
     def forward(self, spec):
         if torch.rand(1).item() > self.p:
             return spec
         rate = torch.empty(1).uniform_(self.min_rate, self.max_rate).item()
-        return self.stretch(spec, rate)
+        return self.stretch(spec, rate).absolute()
 
 
