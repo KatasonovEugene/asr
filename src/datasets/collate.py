@@ -13,7 +13,7 @@ def collate_fn(dataset_items: list[dict]):
     result_batch['text_encoded_length'] = torch.tensor([item['text_encoded'].numel() for item in dataset_items])
     
     specs = [item['spectrogram'].squeeze(0).transpose(0, 1) for item in dataset_items]
-    result_batch['spectrogram'] = pad_sequence(specs, batch_first=True, padding_value=0)
+    result_batch['spectrogram'] = pad_sequence(specs, batch_first=True, padding_value=0).transpose(1, 2)
     result_batch['spectrogram_length'] = torch.tensor([spec.shape[0] for spec in specs])
     
     return result_batch
