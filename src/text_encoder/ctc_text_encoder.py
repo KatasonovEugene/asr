@@ -58,7 +58,7 @@ class CTCTextEncoder:
         prev_token = None
         decoded = []
         for ind in inds:
-            char = self.ind2char.get(ind, self.EMPTY_TOK)
+            char = self.ind2char[ind.item()]
             if char != self.EMPTY_TOK and char != prev_token:
                 decoded.append(char)
             prev_token = char

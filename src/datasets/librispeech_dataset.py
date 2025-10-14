@@ -57,7 +57,7 @@ class LibrispeechDataset(BaseDataset):
         shutil.rmtree(str(self._data_dir / "LibriSpeech"))
 
     def _get_or_load_index(self, part):
-        index_path = self._data_dir / f"{part}_index.json"
+        index_path = Path(f"data/{part}_index.json")
         if index_path.exists():
             with index_path.open() as f:
                 index = json.load(f)
