@@ -8,23 +8,21 @@ defaults:
   - _self_
 optimizer:
   _target_: torch.optim.AdamW
-  lr: 3e-4
+  lr: 5.0
+  weight_decay: 1e-3
 lr_scheduler:
-  _target_: src.scheduler.WarmupCosineScheduler
-  min_lr: 1e-5
-  max_lr: 1e-3
-  min_end_lr: 1e-6
-  warmup_epochs: 5
-  num_epochs: ${..trainer.n_epochs}
-  epoch_len: null
+  _target_: src.scheduler.WarmupScheduler
+  min_lr: 1e-6
+  warmup_steps: 10000
+  d_model: ${..model.conformer_block_params.msha_params.embed_dim}
 loss_function:
   _target_: src.loss.CTCLossWrapper
 text_encoder:
   _target_: src.text_encoder.CTCTextEncoder
 trainer:
   log_step: 50
-  n_epochs: 30
-  epoch_len: 200
+  n_epochs: 1000
+  epoch_len: 512
   device_tensors: ["spectrogram", "text_encoded"] # which tensors should be on device (ex. GPU)
   resume_from: null # null or path to the checkpoint dir with *.pth and config.yaml
   device: auto # device name or "auto"

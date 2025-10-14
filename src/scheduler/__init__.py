@@ -1,1 +1,1 @@
-from src.scheduler.warmup import WarmupCosineScheduler
+from src.scheduler.warmup import WarmupScheduler

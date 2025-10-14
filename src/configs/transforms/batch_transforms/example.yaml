@@ -1,2 +1,15 @@
-train: {}
-inference: {}
+train:
+  spectrogram:
+    _target_: torch.nn.Sequential
+    _args_:
+      # - _target_: src.transforms.RandomTimeStretch
+      #   min_rate: 0.9
+      #   max_rate: 1.1
+      #   p: 0.5
+      - _target_: src.transforms.SpecAugment
+        freq_masks: 2
+        time_masks: 6
+        freq_width: 27
+        time_width: 64
+
+inference: null
