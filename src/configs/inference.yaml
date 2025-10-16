@@ -9,11 +9,13 @@ text_encoder:
   _target_: src.text_encoder.CTCTextEncoderWithLM
   alpha: 0.5
   beta: 1.0
-  beam_width: 100
-  kenlm_model_path: "4gram.arpa"
+  beam_width: 1502
+  kenlm_model_path: "data/lm/librispeech-4gram.arpa"
+  vocab_path: "data/lm/librispeech-vocab.txt"
+  num_workers: 8
 inferencer:
   device_tensors: ["spectrogram", "text_encoded"] # which tensors should be on device (ex. GPU)
   device: auto # device name or "auto"
-  save_path: "inference_result/predictions.txt" # any name here, can be a dataset name
+  save_path: "inference_result" # any name here, can be a dataset name
   seed: 1
   from_pretrained: "best_model/model_best.pth" # path to the pretrained model
