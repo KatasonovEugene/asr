@@ -2,25 +2,20 @@ train:
   - _target_: src.datasets.LibrispeechDataset
     part: "train-clean-100"
     max_audio_length: 16.7
-    data_dir: "/opt/software/datasets/openslr"
     instance_transforms: ${transforms.instance_transforms.train}
   - _target_: src.datasets.LibrispeechDataset
     part: "train-clean-360"
     max_audio_length: 16.7
-    data_dir: "/opt/software/datasets/openslr"
     instance_transforms: ${transforms.instance_transforms.train}
   - _target_: src.datasets.LibrispeechDataset
     part: "train-other-500"
     max_audio_length: 16.7
-    data_dir: "/opt/software/datasets/openslr"
     instance_transforms: ${transforms.instance_transforms.train}
 val_clean:
   - _target_: src.datasets.LibrispeechDataset
     part: "test-other"
-    data_dir: "/opt/software/datasets/openslr"
     instance_transforms: ${transforms.instance_transforms.inference}
 val_other:
   - _target_: src.datasets.LibrispeechDataset
     part: "test-other"
-    data_dir: "/opt/software/datasets/openslr"
     instance_transforms: ${transforms.instance_transforms.inference}

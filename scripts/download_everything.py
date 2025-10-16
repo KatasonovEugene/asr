@@ -6,6 +6,7 @@ from pathlib import Path
 
 LM_URL = "https://www.openslr.org/resources/11/4-gram.arpa.gz"
 VOCAB_URL = "https://www.openslr.org/resources/11/librispeech-vocab.txt"
+MODEL_URL = "https://drive.google.com/file/d/1LlSsO_k4HLONm-HIvkDHO7_pgz-2nJ1y/view?usp=sharing"
 
 
 def download_lm(save_dir="data/lm"):
@@ -32,8 +33,19 @@ def download_lm_vocab(save_dir="data/lm"):
     return vocab_path
 
 
+def download_model(save_dir="conformer"):
+    vocab_path = Path(save_dir) / "model_best.pth"
+    if Path(vocab_path).exists():
+        return vocab_path
+    
+    urllib.request.urlretrieve(VOCAB_URL, vocab_path)
+    return vocab_path
+
+
 if __name__ == "__main__":
     path = download_lm()
     print(f"LM file saved at: {path}")
     path = download_lm_vocab()
     print(f"Vocab file saved at: {path}")
+    path = download_model()
+    print(f"Conformer model saved at: {path}")
