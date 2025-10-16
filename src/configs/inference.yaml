@@ -1,13 +1,18 @@
 defaults:
   - model: conformer
   - metrics: asr_metrics
-  - datasets: example_eval # we do not want to run inference on training data
+  - datasets: test_other
   - dataloader: example
   - transforms: example
   - _self_
+text_encoder:
+  _target_: src.text_encoder.CTCTextEncoderWithLM
+  alpha: 0.5
+  beta: 1.0
+  beam_width: 100
 inferencer:
-  device_tensors: ["data_object", "labels"] # which tensors should be on device (ex. GPU)
+  device_tensors: ["spectrogram", "text_encoded"] # which tensors should be on device (ex. GPU)
   device: auto # device name or "auto"
-  save_path: "example" # any name here, can be a dataset name
+  save_path: "inference_result" # any name here, can be a dataset name
   seed: 1
-  from_pretrained: "saved/model_best.pth" # path to the pretrained model
+  from_pretrained: "best_model/model_best.pth" # path to the pretrained model

@@ -1,1 +1,2 @@
+from src.text_encoder.lm_encoder import CTCTextEncoderWithLM
 from src.text_encoder.ctc_text_encoder import CTCTextEncoder

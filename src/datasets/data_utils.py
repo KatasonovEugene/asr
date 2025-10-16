@@ -5,6 +5,7 @@ from hydra.utils import instantiate
 from src.datasets.collate import collate_fn
 from src.utils.init_utils import set_worker_seed
 
+from torch.utils.data import ConcatDataset
 
 def inf_loop(dataloader):
     """
@@ -68,9 +69,9 @@ def get_dataloaders(config, text_encoder, device):
     dataloaders = {}
     for dataset_partition in config.datasets.keys():
         # dataset partition init
-        dataset = instantiate(
-            config.datasets[dataset_partition], text_encoder=text_encoder
-        )  # instance transforms are defined inside
+
+        inst_datasets = [instantiate(dataset, text_encoder=text_encoder) for dataset in config.datasets[dataset_partition]]
+        dataset = ConcatDataset(inst_datasets)
 
         assert config.dataloader.batch_size <= len(dataset), (
             f"The batch size ({config.dataloader.batch_size}) cannot "

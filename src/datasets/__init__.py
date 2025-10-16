@@ -1,1 +1,2 @@
+from src.datasets.custom_dir_dataset import CustomDirAudioDataset
 from src.datasets.librispeech_dataset import LibrispeechDataset

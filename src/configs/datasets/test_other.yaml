@@ -1,0 +1,5 @@
+test_other:
+  - _target_: src.datasets.LibrispeechDataset
+    part: "test-other"
+    data_dir: "/opt/software/datasets/openslr"
+    instance_transforms: ${transforms.instance_transforms.inference}
