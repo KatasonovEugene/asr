@@ -10,9 +10,10 @@ text_encoder:
   alpha: 0.5
   beta: 1.0
   beam_width: 100
+  kenlm_model_path: "4gram.arpa"
 inferencer:
   device_tensors: ["spectrogram", "text_encoded"] # which tensors should be on device (ex. GPU)
   device: auto # device name or "auto"
-  save_path: "inference_result" # any name here, can be a dataset name
+  save_path: "inference_result/predictions.txt" # any name here, can be a dataset name
   seed: 1
   from_pretrained: "best_model/model_best.pth" # path to the pretrained model

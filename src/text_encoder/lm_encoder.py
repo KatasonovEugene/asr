@@ -2,12 +2,16 @@ import torch
 import re
 from string import ascii_lowercase
 from pyctcdecode import build_ctcdecoder
+from multiprocessing import Pool
 
+def _decode_single(args):
+    decoder, probs, beam_width = args
+    return decoder.decode(probs, beam_width=beam_width).strip()
 
 class CTCTextEncoderWithLM:
     EMPTY_TOK = ""
 
-    def __init__(self, alpha, beta, beam_width, kenlm_model_path, alphabet=None, **kwargs):
+    def __init__(self, alpha, beta, beam_width, kenlm_model_path, num_workers, alphabet=None, **kwargs):
         assert kenlm_model_path is not None
 
         if alphabet is None:
@@ -26,6 +30,7 @@ class CTCTextEncoderWithLM:
             beta=beta
         )
         self.beam_width = beam_width
+        self.num_workers = num_workers
 
     def __len__(self):
         return len(self.vocab)
@@ -46,16 +51,19 @@ class CTCTextEncoderWithLM:
 
     def decode(self, log_probs, log_probs_lengths):
         probs = log_probs.exp().cpu().detach().numpy()
-        decoded = []
+        decode_args = []
+
         for i, length in enumerate(log_probs_lengths):
             sample_probs = probs[i][:length]
-            text = self.ctc_decode(sample_probs)
-            decoded.append(text)
-        return decoded
+            decode_args.append((self.decoder, sample_probs, self.beam_width))
 
-    def ctc_decode(self, probs):
-        text = self.decoder.decode(probs, beam_width=self.beam_width)
-        return text.strip()
+        if self.num_workers > 1:
+            with Pool(self.num_workers) as pool:
+                decoded = pool.map(_decode_single, decode_args)
+        else:
+            decoded = [_decode_single(args) for args in decode_args]
+
+        return decoded
 
     @staticmethod
     def normalize_text(text: str):

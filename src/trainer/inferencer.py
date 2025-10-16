@@ -133,31 +133,18 @@ class Inferencer(BaseTrainer):
             for met in self.metrics["inference"]:
                 metrics.update(met.name, met(**batch))
 
-        # Some saving logic. This is an example
-        # Use if you need to save predictions on disk
-
-        batch_size = batch["logits"].shape[0]
-        current_id = batch_idx * batch_size
-
-        for i in range(batch_size):
-            # clone because of
-            # https://github.com/pytorch/pytorch/issues/1995
-            logits = batch["logits"][i].clone()
-            label = batch["labels"][i].clone()
-            pred_label = logits.argmax(dim=-1)
-
-            output_id = current_id + i
-
-            output = {
-                "pred_label": pred_label,
-                "label": label,
-            }
-
-            if self.save_path is not None:
-                # you can use safetensors or other lib here
-                torch.save(output, self.save_path / part / f"output_{output_id}.pth")
+        self._log_result(batch)
 
         return batch
+
+    def _log_result(self, batch):
+        preds = self.text_encoder.decode(batch['log_probs'], batch['log_probs_length'])
+        if self.save_path is not None:
+            for pred, target in zip(preds, batch['text']):
+                target = self.text_encoder.normalize_text(target)
+                with open(self.save_path, "w") as f:
+                    to_write = target + "\n" + pred + "\n\n"
+                    f.write(to_write)
 
     def _inference_part(self, part, dataloader):
         """
