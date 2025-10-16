@@ -140,9 +140,9 @@ class Inferencer(BaseTrainer):
     def _log_result(self, batch):
         preds = self.text_encoder.decode(batch['log_probs'], batch['log_probs_length'])
         if self.save_path is not None:
-            for pred, target in zip(preds, batch['text']):
-                target = self.text_encoder.normalize_text(target)
-                with open(self.save_path, "w") as f:
+            with open(self.save_path / "predictions.txt", "a") as f:
+                for pred, target in zip(preds, batch['text']):
+                    target = self.text_encoder.normalize_text(target)
                     to_write = target + "\n" + pred + "\n\n"
                     f.write(to_write)
 

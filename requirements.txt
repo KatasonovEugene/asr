@@ -12,6 +12,8 @@ wandb
 comet_ml
 hydra-core
 editdistance
+pyctcdecode
+kenlm
 datasets
 soundfile
 wget

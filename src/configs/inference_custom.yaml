@@ -1,7 +1,7 @@
 defaults:
   - model: conformer
   - metrics: asr_metrics
-  - datasets: test_other
+  - datasets: custom_dir_dataset
   - dataloader: example
   - transforms: example
   - _self_
