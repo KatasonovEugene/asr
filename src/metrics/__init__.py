@@ -1,1 +1,1 @@
-from src.metrics.asr_metrics import ArgmaxCERMetric, ArgmaxWERMetric
+from src.metrics.asr_metrics import CER, WER

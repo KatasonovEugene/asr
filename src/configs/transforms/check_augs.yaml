@@ -1,4 +1,0 @@
-defaults:
-  - batch_transforms: check_augs
-  - instance_transforms: check_augs
-  - _self_

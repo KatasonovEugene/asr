@@ -7,5 +7,6 @@ train:
         time_masks: 6
         freq_width: 27
         time_width: 64
+        p: 0.05
 
 inference: null

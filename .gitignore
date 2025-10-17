@@ -4,6 +4,7 @@ __pycache__/
 
 *$py.class
 a.ipynb
+models
 sync_wandb_logs.sh
 best_model
 # C extensions

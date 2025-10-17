@@ -1,0 +1,8 @@
+defaults:
+  - single: conformer
+
+_target_: src.model.Ensemble
+model_dir: "models"
+aggregate: "mean"
+device: null
+_recursive_: False

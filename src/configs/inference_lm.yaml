@@ -1,12 +1,18 @@
 defaults:
   - model: conformer
   - metrics: asr_metrics
-  - datasets: custom_dir_dataset
+  - datasets: test_other
   - dataloader: example
   - transforms: example
   - _self_
 text_encoder:
-  _target_: src.text_encoder.CTCTextEncoder
+  _target_: src.text_encoder.CTCTextEncoderWithLM
+  alpha: 0.5
+  beta: 1.0
+  beam_width: 10000
+  kenlm_model_path: "data/lm/librispeech-4gram.arpa"
+  vocab_path: "data/lm/librispeech-vocab.txt"
+  num_workers: 8
 inferencer:
   device_tensors: ["spectrogram", "text_encoded"] # which tensors should be on device (ex. GPU)
   device: auto # device name or "auto"

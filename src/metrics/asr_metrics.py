@@ -5,7 +5,7 @@ from src.metrics.base_metric import BaseMetric
 from src.metrics.utils import calc_cer, calc_wer
 
 
-class ArgmaxCERMetric(BaseMetric):
+class CER(BaseMetric):
     def __init__(self, text_encoder, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.text_encoder = text_encoder
@@ -20,7 +20,7 @@ class ArgmaxCERMetric(BaseMetric):
             cers.append(calc_cer(target_text, pred_text))
         return sum(cers) / len(cers)
 
-class ArgmaxWERMetric(BaseMetric):
+class WER(BaseMetric):
     def __init__(self, text_encoder, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.text_encoder = text_encoder

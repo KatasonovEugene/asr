@@ -18,6 +18,7 @@ loss_function:
   _target_: src.loss.CTCLossWrapper
 text_encoder:
   _target_: src.text_encoder.CTCTextEncoder
+  bpe: False
 trainer:
   log_step: 50
   n_epochs: 1000

@@ -1,19 +1,13 @@
 import re
 from string import ascii_lowercase
-
 import torch
-
-# TODO add CTC decode
-# TODO add BPE, LM, Beam Search support
-# Note: think about metrics and encoder
-# The design can be remarkably improved
-# to calculate stuff more efficiently and prettier
+from transformers import AutoTokenizer
 
 
 class CTCTextEncoder:
     EMPTY_TOK = ""
 
-    def __init__(self, alphabet=None, **kwargs):
+    def __init__(self, use_bpe=False, bpe_model_name="bert-base-uncased", alphabet=None, **kwargs):
         """
         Args:
             alphabet (list): alphabet for language. If None, it will be
@@ -22,13 +16,19 @@ class CTCTextEncoder:
 
         if alphabet is None:
             alphabet = list(ascii_lowercase + " ")
-
         self.alphabet = alphabet
-        self.vocab = [self.EMPTY_TOK] + list(self.alphabet)
+        self.use_bpe = use_bpe
 
-        self.ind2char = dict(enumerate(self.vocab))
-        self.char2ind = {v: k for k, v in self.ind2char.items()}
-
+        if self.use_bpe:
+            self.tokenizer = AutoTokenizer.from_pretrained(bpe_model_name)
+            self.vocab = self.tokenizer.get_vocab().keys()
+            self.char2ind = self.tokenizer.get_vocab()
+            self.ind2char = {v: k for k, v in self.char2ind.items()}
+        else:
+            self.vocab = [self.EMPTY_TOK] + list(self.alphabet)
+            self.ind2char = dict(enumerate(self.vocab))
+            self.char2ind = {v: k for k, v in self.ind2char.items()}
+        
     def __len__(self):
         return len(self.vocab)
 
@@ -39,6 +39,9 @@ class CTCTextEncoder:
     def encode(self, text) -> torch.Tensor:
         text = self.normalize_text(text)
         try:
+            if self.use_bpe:
+                ids = self.tokenizer.encode(text, add_special_tokens=False)
+                return torch.tensor(ids).unsqueeze(0)
             return torch.Tensor([self.char2ind[char] for char in text]).unsqueeze(0)
         except KeyError:
             unknown_chars = set([char for char in text if char not in self.char2ind])

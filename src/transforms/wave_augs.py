@@ -1,7 +1,7 @@
 from torch import nn
 from torch_audiomentations import AddColoredNoise, PitchShift, Gain
 
-class AddWhiteNoise(nn.Module):
+class AddNoise(nn.Module):
     def __init__(self, min_snr_in_db, max_snr_in_db, p):
         super().__init__()
         self.add_noise = AddColoredNoise(

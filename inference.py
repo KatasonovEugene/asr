@@ -36,7 +36,10 @@ def main(config):
     # batch_transforms should be put on device
     dataloaders, batch_transforms = get_dataloaders(config, text_encoder, device)
 
-    # build model architecture, then print to console
+    if 'Ensemble' in config.model._target_:
+        config.model.single.n_tokens = len(text_encoder)
+        config.model.device = device
+
     model = instantiate(config.model, n_tokens=len(text_encoder)).to(device)
     print(model)
 

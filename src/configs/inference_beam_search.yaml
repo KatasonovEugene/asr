@@ -1,12 +1,14 @@
 defaults:
   - model: conformer
   - metrics: asr_metrics
-  - datasets: custom_dir_dataset
+  - datasets: test_other
   - dataloader: example
   - transforms: example
   - _self_
 text_encoder:
-  _target_: src.text_encoder.CTCTextEncoder
+  _target_: src.text_encoder.CTCTextEncoderWithBeamSearch
+  beam_width: 20
+  num_workers: 8
 inferencer:
   device_tensors: ["spectrogram", "text_encoded"] # which tensors should be on device (ex. GPU)
   device: auto # device name or "auto"

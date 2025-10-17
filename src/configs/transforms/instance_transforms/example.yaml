@@ -20,7 +20,7 @@ train:
   audio: # name of the tensor on which we apply transform
     _target_: torch.nn.Sequential
     _args_:
-      - _target_: src.transforms.AddWhiteNoise
+      - _target_: src.transforms.AddNoise
         min_snr_in_db: 10
         max_snr_in_db: 30
         p: 0.5

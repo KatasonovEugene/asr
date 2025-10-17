@@ -5,11 +5,11 @@ import torch.nn.functional as F
 
 
 class SpecAugment(nn.Module):
-    def __init__(self, freq_masks, time_masks, freq_width, time_width):
+    def __init__(self, freq_masks, time_masks, freq_width, time_width, p):
         super().__init__()
         self.transforms = torch.nn.Sequential(
             *[torchaudio.transforms.FrequencyMasking(freq_width, iid_masks=True) for _ in range(freq_masks)],
-            *[torchaudio.transforms.TimeMasking(time_width, iid_masks=True) for _ in range(time_masks)]
+            *[torchaudio.transforms.TimeMasking(time_width, iid_masks=True, p=p) for _ in range(time_masks)]
         )
 
     def forward(self, spec):
