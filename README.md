@@ -3,8 +3,8 @@
 <p align="center">
   <a href="#installation">Installation</a> •
   <a href="#how-to-train">How To Train</a> •
-  <a href="#how-to-use">Inference</a> •
-  <a href="#how-to-use">Custom Dataset Inference</a> •
+  <a href="#inference">Inference</a> •
+  <a href="#custom-dataset-inference">Custom Dataset Inference</a> •
   <a href="#credits">Credits</a> •
   <a href="#license">License</a>
 </p>
@@ -16,13 +16,11 @@
    ```bash
    pip install -r requirements.txt
    ```
-
 2. Install model weights & LM
 
    ```bash
    python3 scripts/download_everything.py
    ```
-
 ## How To Train
 
 For training the same model, you need to train in 2 phases.
@@ -32,24 +30,27 @@ For training the same model, you need to train in 2 phases.
    ```bash
    python3 train.py -cn=train_phase_1
    ```
-
 2. Phase 2
 
    ```bash
    python3 train.py -cn=train_phase_2
    ```
 
-
 ## Inference
 
-You have three options of inference
-```bash
-python3 inference.py HYDRA_CONFIG_ARGUMENTS
-```
+To reproduce original result:
+
+   ```bash
+   python3 inference.py -cn=inference_lm
+   ```
 
 ## Custom Dataset Inference
 
-
+To evaluate on custom dataset:
+   ```bash
+   python3 inference.py -cn=inference_custom datasets.test.0.audio_dir=<YOUR_PATH>
+   ```
+WER/CER metrics will be automatically evaluated
 
 ## Credits
 

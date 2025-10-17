@@ -9,7 +9,7 @@ text_encoder:
   _target_: src.text_encoder.CTCTextEncoderWithLM
   alpha: 0.5
   beta: 1.0
-  beam_width: 10000
+  beam_width: 1502
   kenlm_model_path: "data/lm/librispeech-4gram.arpa"
   vocab_path: "data/lm/librispeech-vocab.txt"
   num_workers: 8
