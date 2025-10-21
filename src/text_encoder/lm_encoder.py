@@ -48,5 +48,6 @@ class CTCTextEncoderWithLM(CTCTextEncoder):
         with open(self.kenlm_model_path, "w") as file:
             file.write(grams)
 
+        uni = [line.lower().replace("'", "")[:-1] for line in uni]
         uni = list(filter(lambda s : len(s) > 0, uni))
         return uni
