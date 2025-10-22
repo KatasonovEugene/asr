@@ -1,0 +1,2 @@
+prediction_path: "data/saved/inference_result/test"
+target_path: "custom_dataset/transcriptions"

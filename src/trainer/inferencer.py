@@ -1,5 +1,6 @@
 import torch
 from tqdm.auto import tqdm
+from pathlib import Path
 
 from src.metrics.tracker import MetricTracker
 from src.trainer.base_trainer import BaseTrainer
@@ -133,18 +134,17 @@ class Inferencer(BaseTrainer):
             for met in self.metrics["inference"]:
                 metrics.update(met.name, met(**batch))
 
-        self._log_result(batch)
+        self._log_result(**batch, part=part)
 
         return batch
 
-    def _log_result(self, batch):
-        preds = self.text_encoder.decode(batch['log_probs'], batch['log_probs_length'])
+    def _log_result(self, log_probs, log_probs_length, audio_path, part, **batch):
+        preds = self.text_encoder.decode(log_probs, log_probs_length)
         if self.save_path is not None:
-            with open(self.save_path / "predictions.txt", "a") as f:
-                for pred, target in zip(preds, batch['text']):
-                    target = self.text_encoder.normalize_text(target)
-                    to_write = target + "\n" + pred + "\n\n"
-                    f.write(to_write)
+            for pred, _path in zip(preds, audio_path):
+                path = self.save_path / part / (Path(_path).stem + ".txt")
+                with open(path, "w") as f:
+                    f.write(pred)
 
     def _inference_part(self, part, dataloader):
         """
